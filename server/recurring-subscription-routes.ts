@@ -16,7 +16,7 @@ function getEnv(key: string, fallback?: string) {
   if (typeof v === "string" && v.length > 0) return v;
   return fallback;
 }
-
+import { buildInitializeUrlAndQr } from "./initialize-tx-qr";
 export function registerRecurringSubscriptionRoutes(app: Express) {
   // Create subscription and return wallet connection QR + deeplink
   app.post("/api/recurring-subscriptions", authenticateApiKey(0.0), async (req: ApiKeyAuthenticatedRequest, res: Response) => {
@@ -215,6 +215,10 @@ export function registerRecurringSubscriptionRoutes(app: Express) {
           });
 
           // Persist anchor PDAs and amounts in metadata for the worker
+         // Build initialize url + qr (so the merchant receives a shareable URL + QR)
+          const { initializeTxUrl, initializeTxQr } = await buildInitializeUrlAndQr(subscriptionId);
+
+          // Persist anchor PDAs, amounts and serialized unsigned tx in metadata for the worker and init page
           subscription.metadata = {
             ...(subscription.metadata || {}),
             anchor: {
@@ -224,21 +228,25 @@ export function registerRecurringSubscriptionRoutes(app: Express) {
               escrowBump: txInfo.escrowBump,
               amountPerMonthLamports,
               totalMonths,
-              lockedAmountLamports
+              lockedAmountLamports,
+              serializedTxBase64: txInfo.serializedTxBase64, // unsigned tx persisted
+              initializeTxUrl, // user-facing URL to sign the tx (merchant can show QR -> open mobile)
+              initializeTxQr,  // data URL for QR (merchant can embed directly)
             }
           };
-          subscription.status = "pending_onchain_initialize";
+          subscription.status = "pending_payment";
           await subscription.save();
 
-          // Build payload to send to merchant webhook / callback URL
+          // Build payload to send to merchant webhook / callback URL — include the initialize url + qr
           const webhookPayload = {
             subscription_id: subscriptionId,
-            serializedTxBase64: txInfo.serializedTxBase64,
+            serializedTxBase64: txInfo.serializedTxBase64, // still included if merchants want direct base64
+            initialize_tx_url: initializeTxUrl,
+            initialize_tx_qr: initializeTxQr, // data URL (image/png) — merchant can display directly
             subscription_pda: txInfo.subscriptionPda,
             escrow_pda: txInfo.escrowPda,
             status: subscription.status,
           };
-
           // Try to POST directly to merchant webhookUrl if available; otherwise enqueue delivery
           if (subscription.webhookUrl) {
             try {
@@ -390,6 +398,7 @@ export function registerRecurringSubscriptionRoutes(app: Express) {
     }
   });
 }
+
 
 
 
