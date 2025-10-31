@@ -202,6 +202,16 @@ export function decryptPhantomCallbackData(
   throw new Error("decryption_failed (invalid encoding or ciphertext)");
 }
 
+export async function buildInitializeUrlAndQr(subscriptionId: string, dappBaseUrl?: string) {
+  const dappUrl = (dappBaseUrl || process.env.PHANTOM_DAPP_URL || "https://blocksub-public-1.onrender.com").replace(/\/$/, "");
+  const initializeTxUrl = `${dappUrl}/initialize-tx/${encodeURIComponent(subscriptionId)}`;
+
+  // Generate a QR code data URL (PNG)
+  const qrOptions = { errorCorrectionLevel: "M", width: 320 };
+  const initializeTxQr = String(await QRCode.toDataURL(initializeTxUrl, qrOptions));
+
+  return { initializeTxUrl, initializeTxQr };
+}
 
 
 
