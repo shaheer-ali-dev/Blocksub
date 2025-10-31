@@ -1,0 +1,20 @@
+[package]
+name = "blocksub"
+version = "0.1.0"
+description = "CBlockSub Anchor Program — powering automated, trustless recurring crypto payments on Solana through secure escrow and smart contract automation."
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "blocksub"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.29.0"
+solana-program = "1.16.24"
