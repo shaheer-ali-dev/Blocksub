@@ -321,8 +321,8 @@ echo $response;`
     /* REQUIRED: Billing interval - 'daily', 'weekly', 'monthly', or 'yearly' */
     "billingInterval": "monthly",
     /* REQUIRED: Merchant wallet address to receive payments */
-    "merchantWalletAddress": "0xABCDEF0123456789abcdef0123456789ABCDEF01",
-    /* OPTIONAL: URL for webhook notifications */
+    "merchantWalletAddress": "<your_merchant_wallet>",
+
     "webhookUrl": "https://example.com/webhook",
     /* OPTIONAL: Free-form metadata */
     "metadata": { "customer_id": "cus_123", "order_id": "ord_456" },
@@ -352,7 +352,7 @@ const response = await fetch('${baseUrl}/api/recurring-subscriptions', {
     // REQUIRED: Billing interval ('daily', 'weekly', 'monthly', or 'yearly')
     billingInterval: 'monthly',
     // REQUIRED: Merchant wallet address
-    merchantWalletAddress: '0xABCDEF0123456789abcdef0123456789ABCDEF01',
+    merchantWalletAddress: '<your_merchant_wallet>',
     // OPTIONAL: Webhook callback URL
     webhookUrl: 'https://example.com/webhook',
     // OPTIONAL: Additional metadata
@@ -388,7 +388,7 @@ payload = {
   # REQUIRED: Billing interval ('daily', 'weekly', 'monthly', or 'yearly')
   'billingInterval': 'monthly',
   # REQUIRED: Merchant wallet address
-  'merchantWalletAddress': '0xABCDEF0123456789abcdef0123456789ABCDEF01',
+  'merchantWalletAddress': '<your_merchant_wallet>',
   # OPTIONAL: Webhook callback URL
   'webhookUrl': 'https://example.com/webhook',
   # OPTIONAL: Custom metadata
@@ -425,7 +425,7 @@ func main() {
     /* REQUIRED: Billing interval - 'daily', 'weekly', 'monthly', or 'yearly' */
     "billingInterval": "monthly",
     /* REQUIRED: Merchant wallet address to receive funds */
-    "merchantWalletAddress": "0xABCDEF0123456789abcdef0123456789ABCDEF01",
+    "merchantWalletAddress": "<your_merchant_wallet>",
     /* OPTIONAL: Webhook callback URL */
     "webhookUrl": "https://example.com/webhook",
     /* OPTIONAL: Custom metadata */
@@ -479,7 +479,7 @@ req.body = {
   # REQUIRED: Billing interval
   billingInterval: 'monthly',
   # REQUIRED: Merchant wallet address
-  merchantWalletAddress: '0xABCDEF0123456789abcdef0123456789ABCDEF01',
+  merchantWalletAddress: '<your_merchant_wallet>',
   # OPTIONAL: Webhook callback URL
   webhookUrl: 'https://example.com/webhook',
   # OPTIONAL: Metadata
@@ -512,7 +512,7 @@ $data = [
   // REQUIRED: Billing interval ('daily', 'weekly', 'monthly', or 'yearly')
   'billingInterval' => 'monthly',
   // REQUIRED: Merchant wallet address
-  'merchantWalletAddress' => '0xABCDEF0123456789abcdef0123456789ABCDEF01',
+  'merchantWalletAddress' => '<your_merchant_wallet>',
   // OPTIONAL: Webhook URL for callbacks
   'webhookUrl' => 'https://example.com/webhook',
   // OPTIONAL: Custom metadata
